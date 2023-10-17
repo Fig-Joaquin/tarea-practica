@@ -4,7 +4,7 @@ import { Typography, Card, CardContent, Button } from '@mui/material';
 function PerrosAceptados({ perrosAceptados, openDescripcionModal, arrepentirse, perrosRechazados }) {
   return (
     <div className="candidato-aceptado" style={{ overflowY: 'auto', maxHeight: '1000px' }}>
-       <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '10px' }}>
+      <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '10px' }}>
         Perros Aceptados
       </Typography>
       <ul>

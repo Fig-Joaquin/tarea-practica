@@ -1,11 +1,10 @@
-/* Estilos comunes para los contenedores */
 .app-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* Tres columnas con igual ancho */
+    grid-template-columns: 1fr 1fr 1fr; 
     gap: 130px;
     max-width: 3000px;
     margin: 50px;
-    margin-top: 0px; /* Mover 30px hacia abajo */
+    margin-top: 0px; 
   }
   
   .column {
@@ -39,7 +38,7 @@
     margin: 10px 0;
   }
   
-  /* Estilos para imágenes */
+
   img {
     max-width: 100%;
     height: auto;
@@ -47,9 +46,9 @@
     margin: 10px 0;
   }
   
-  /* Estilos para botones */
+  
   button {
-    width: 45%; /* Ancho uniforme para botones */
+    width: 45%; 
   }
   
   .candidato-container {
@@ -57,16 +56,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-centered;
-    max-width: 250px; /* Establece un ancho máximo */
-    max-height: 100%; /* Esto hará que ocupe toda la altura del contenedor padre */
+    max-width: 250px; 
+    max-height: 100%; 
     padding: 10px;
 
     border-radius: 8px;
     text-align: center;
  
     overflow: hidden;
-    margin-left: 75px; /* Mover 20px hacia la derecha */
-    margin-top: 80px; /* Mover 30px hacia abajo */
+    margin-left: 75px; 
+    margin-top: 80px; 
   }
   
   .candidato-container img {

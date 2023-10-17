@@ -1,4 +1,3 @@
-// Candidato.jsx
 import React from 'react';
 import { Typography, Button, CircularProgress } from '@mui/material';
 import '../App.css';
