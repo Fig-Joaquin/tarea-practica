@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, CircularProgress } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 
 import './App.css';
+import Candidato from './components/Candidato';
+import PerrosAceptados from './components/PerrosAceptados';
+import PerrosRechazados from './components/PerrosRechazados';
+import DescripcionModal from './components/DescripcionModal';
 
 function generarNombreAleatorio() {
   const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -28,11 +31,11 @@ function generarDescripcionAleatoria() {
   return descripciones[indice];
 }
 
-export default function App() {
+function App() {
   const [apiData, setApiData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [nombrePerroCandidato, setNombrePerroCandidato] = useState(generarNombreAleatorio());
-  const [descripcionPerroCandidato, setDescripcionPerroCandidato] = useState(''); // Inicializa la descripción en blanco
+  const [descripcionPerroCandidato, setDescripcionPerroCandidato] = useState('');
   const [perrosAceptados, setPerrosAceptados] = useState([]);
   const [perrosRechazados, setPerrosRechazados] = useState([]);
   const [openDescripcion, setOpenDescripcion] = useState(false);
@@ -97,126 +100,44 @@ export default function App() {
   const arrepentirse = (perro, listaOrigen, listaDestino) => {
     const nuevoOrigen = listaOrigen.filter((p) => p !== perro);
     const nuevoDestino = [perro, ...listaDestino];
-    listaOrigen === perrosAceptados
-      ? setPerrosAceptados(nuevoOrigen)
-      : setPerrosRechazados(nuevoOrigen);
-    listaOrigen === perrosAceptados
-      ? setPerrosRechazados(nuevoDestino)
-      : setPerrosAceptados(nuevoDestino);
+    if (listaOrigen === perrosAceptados) {
+      setPerrosAceptados(nuevoOrigen);
+      setPerrosRechazados(nuevoDestino);
+    } else {
+      setPerrosRechazados(nuevoOrigen);
+      setPerrosAceptados(nuevoDestino);
+    }
   };
 
   return (
     <div className="app-container">
-      <div id="perroCandidato">
-        <div className="candidato-container" style={{ width: '250px' }}>
-          <Typography variant="h5" gutterBottom>
-            Perro Candidato
-          </Typography>
-          {apiData ? (
-            <img src={apiData.message} alt="Perro" className="candidato-imagen" />
-          ) : (
-            <Typography>{loading ? <CircularProgress size={55} color="info" /> : 'Error al cargar la imagen'}</Typography>
-          )}
-          <Typography gutterBottom>Nombre: {nombrePerroCandidato}</Typography>
-          <Typography gutterBottom> {descripcionPerroCandidato}</Typography>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={aceptarPerro}
-            disabled={loading}
-            style={{ margin: '10px 0' }}
-          >
-            Aceptar
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={rechazarPerro}
-            disabled={loading}
-            style={{ margin: '10px 0' }}
-          >
-            Rechazar
-          </Button>
-        </div>
-      </div>
-      <div className="column" id="perrosAceptados">
-        <div className="candidato-aceptado">
-          <Typography variant="h4" gutterBottom>
-            Perros Aceptados
-          </Typography>
-          <ul>
-            {perrosAceptados.map((perro, index) => (
-              <Card key={index} className="card" style={{ marginBottom: '20px' }}>
-                <CardContent className="card-content">
-                  <Typography>{perro.nombre}</Typography>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => openDescripcionModal(perro.descripcion)}
-                    style={{ margin: '10px 0' }}
-                  >
-                    Ver Descripción
-                  </Button>
-                  <img src={perro.imagen} alt={perro.nombre} style={{ margin: '10px 0', width: '100%', height: 'auto' }} />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => arrepentirse(perro, perrosAceptados, perrosRechazados)}
-                  >
-                    Arrepentirse
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="column" id="perrosRechazados">
-        <div className="candidato-rechazado">
-          <Typography variant="h4" gutterBottom>
-            Perros Rechazados
-          </Typography>
-          <ul>
-            {perrosRechazados.map((perro, index) => (
-              <Card key={index} className="card" style={{ marginBottom: '20px' }}>
-                <CardContent className="card-content">
-                  <Typography>{perro.nombre}</Typography>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => openDescripcionModal(perro.descripcion)}
-                    style={{ margin: '10px 0' }}
-                  >
-                    Ver Descripción
-                  </Button>
-                  <img src={perro.imagen} alt={perro.nombre} style={{ margin: '10px 0', width: '100%', height: 'auto' }} />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => arrepentirse(perro, perrosRechazados, perrosAceptados)}
-                  >
-                    Arrepentirse
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <Dialog open={openDescripcion} onClose={closeDescripcionModal}>
-        <DialogTitle>Descripción del Perro</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {descripcionSeleccionada}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDescripcionModal} color="primary">
-            Cerrar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Candidato
+        apiData={apiData}
+        loading={loading}
+        nombrePerroCandidato={nombrePerroCandidato}
+        descripcionPerroCandidato={descripcionPerroCandidato}
+        aceptarPerro={aceptarPerro}
+        rechazarPerro={rechazarPerro}
+      />
+      <PerrosAceptados
+        perrosAceptados={perrosAceptados}
+        openDescripcionModal={openDescripcionModal}
+        arrepentirse={arrepentirse}
+        perrosRechazados={perrosRechazados}
+      />
+      <PerrosRechazados
+        perrosRechazados={perrosRechazados}
+        openDescripcionModal={openDescripcionModal}
+        arrepentirse={arrepentirse}
+        perrosAceptados={perrosAceptados}
+      />
+      <DescripcionModal
+        openDescripcion={openDescripcion}
+        closeDescripcionModal={closeDescripcionModal}
+        descripcionSeleccionada={descripcionSeleccionada}
+      />
     </div>
   );
 }
+
+export default App;
